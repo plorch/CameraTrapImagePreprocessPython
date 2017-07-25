@@ -36,7 +36,7 @@ Need to:
 filename_pattern = '<ck>_<cname>_<dname>__<datetaken>__<num>.jpg'
 SAVE_DIRECTORY='toupload'
 # The r below turns the string into a raw string, preventing the \ from causing escapes
-folderpath = r"E:\UNPROCESSED\8th check August 2016\8thCheckAugust2016_2readytoupload"
+folderpath = r"E:\UNPROCESSED\8th check August 2016\8thCheckAugust2016_3"
 
 def get_exif_data(filename):
     """Get embedded EXIF data from image file.

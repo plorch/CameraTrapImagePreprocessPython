@@ -8,7 +8,7 @@ This is a script that removes subject sets from a workflow
 # Set workflow here each time you use it
 workflow_id=1432
 # Set subject sets to add to workflow
-subject_sets=(9436, 9440, 9443, 9445, 9447, 9449, 9450, 9451, 9452, 9453, 9454, 9455, 9482, 9485, 9488, 9489, 9491, 9492, 9493, 9499, 9500, 9503, 9509)
+subject_sets=(11343, 11372, 11373, 11375, 11376, 11379, 11381, 11382, 11383, 11384, 11385, 11388, 11391, 11393, 11394, 11395, 11397, 11406, 11407, 11408, 11409, 11411, 11413, 11414, 11416, 11417, 11418, 11422, 11423, 11424, 11425, 11426, 11427, 11428, 11433, 11434, 11435, 11436, 11437, 11438, 11439, 11440, 11441, 11442, 11444, 11445, 11446, 11448, 11450)
 
 # TODO: put your username and password in here or use ENV vars
 Panoptes.connect(username='Pat_Lorch', password=os.environ['ZOONPASS'])

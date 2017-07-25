@@ -7,7 +7,7 @@ from panoptes_client.panoptes import PanoptesAPIException
 This is the version I have modified to work with my PC
 
 Now that the cli is mature, there is a command line equivalent (that does not
-write subject sets to the text file.
+write subject sets to the text file).
 """
 # get a ref to the project we're uploading to -> change this for the correct project
 # e.g. https://www.zooniverse.org/projects/pat-lorch/cmp-wildlife-camera-traps
@@ -32,10 +32,10 @@ project_slug = 'pat-lorch/focus-on-wildlife-cleveland-metroparks'
 
 # get an API connection with our user creds
 # TODO: put your username and password in here or use ENV vars
-Panoptes.connect(username='Pat_Lorch', password='FlivBo@9')
+Panoptes.connect(username='Pat_Lorch', password=os.environ['ZOONPASS'])
 
 ## *** Change these every time you run it. ***
-uploaddir=r'E:\UNPROCESSED\8th check August 2016\8thCheckAugust2016_2readytoupload\BC1024b_6\toupload'
+uploaddir=r'E:\UNPROCESSED\8th check August 2016\8thCheckAugust2016_3\BC1046b\uploaded'
 print uploaddir
 savedsubjs=os.path.join(os.path.split(os.path.split(uploaddir)[0])[0],'subject_sets_saved.txt')
 print savedsubjs

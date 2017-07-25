@@ -1,3 +1,4 @@
+import os
 from panoptes_client import SubjectSet, Subject, Project, Panoptes, Workflow
 """
 This is a script to print all subject sets linked to

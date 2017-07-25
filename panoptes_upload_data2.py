@@ -28,7 +28,7 @@ project = Project.find(slug='pat-lorch/focus-on-wildlife-cleveland-metroparks')
 subject_set = SubjectSet()
 subject_set.links.project = project
 ## *** Change these every time you run it. ***
-uploaddir=r'E:\UNPROCESSED\8th check August 2016\8thCheckAugust2016_2readytoupload\BC1024b_5\toupload'
+uploaddir=r'E:\UNPROCESSED\8th check August 2016\8thCheckAugust2016_3\WC1376c\toupload'
 print uploaddir
 savedsubjs=os.path.join(os.path.split(os.path.split(uploaddir)[0])[0],'subject_sets_saved.txt')
 print savedsubjs

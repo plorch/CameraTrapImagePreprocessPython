@@ -36,7 +36,7 @@ Need to:
 filename_pattern = '<ck>_<cname>_<dname>__<datetaken>__<num>.jpg'
 SAVE_DIRECTORY='toupload'
 # The r below turns the string into a raw string, preventing the \ from causing escapes
-folderpath = r"E:\UNPROCESSED\8th check August 2016\8thCheckAugust2016_3"
+folderpath = r"E:\UNPROCESSED\9th Check September\9thCheckSeptember2016_1"
 
 def get_exif_data(filename):
     """Get embedded EXIF data from image file.
@@ -58,16 +58,19 @@ def get_exif_data(filename):
     return ret
 
 def get_date_taken(filename):
+    """Extract datetime"""
     datestring = get_exif_data(filename)['DateTimeOriginal']
     return datetime.datetime.strptime(datestring, '%Y:%m:%d %H:%M:%S')
 
 def get_filenames(folderpath): #
+    """Get folderpath, change to that working directory, and return the list of files."""
     os.chdir(folderpath)
     files=os.listdir('.')
     return [i for i in files if os.path.splitext(i)[1].lower() in {'.jpg', '.png'}]
 
 def get_image_paths(folderpath):
-  return (os.path.join(folderpath, f) 
+    """Get image paths"""
+    return (os.path.join(folderpath, f) 
       for f in os.listdir(folderpath) 
       if os.path.splitext(f)[1].lower() in {'.jpg', '.png'})
 

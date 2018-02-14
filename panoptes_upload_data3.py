@@ -1,4 +1,4 @@
-import csv, os, signal, winsound
+import csv, os, signal, winsound, time
 from panoptes_client import SubjectSet, Subject, Project, Panoptes
 from panoptes_client.panoptes import PanoptesAPIException
 # debugger with breakpoints set by pdb.set_trace()
@@ -12,8 +12,11 @@ write subject sets to the text file).
 # get a ref to the project we're uploading to -> change this for the correct project
 # e.g. https://www.zooniverse.org/projects/pat-lorch/cmp-wildlife-camera-traps
 project = Project.find(slug='pat-lorch/focus-on-wildlife-cleveland-metroparks')
+# If this fails, enter 
+#Panoptes.connect(username='Pat_Lorch', password=os.environ['ZOONPASS'])
 # OR Just use the project id from the lab if you know it
 # project = Project.find(PROJECT_ID_HERE)
+# project = Project.find("1793")
 ## should be <Project 1793>
 
 # Debug check the workflows on the project
@@ -35,11 +38,11 @@ project_slug = 'pat-lorch/focus-on-wildlife-cleveland-metroparks'
 Panoptes.connect(username='Pat_Lorch', password=os.environ['ZOONPASS'])
 
 ## *** Change these every time you run it. ***
-uploaddir=r'E:\UNPROCESSED\8th check August 2016\8thCheckAugust2016_3\BC1046b\uploaded'
+uploaddir=r'E:\UNPROCESSED\9th Check September\9thCheckSeptember2016_1\WC1072a\toupload'
 print uploaddir
 savedsubjs=os.path.join(os.path.split(os.path.split(uploaddir)[0])[0],'subject_sets_saved.txt')
 print savedsubjs
-set_name = 'C8_'+os.path.split(os.path.split(uploaddir)[0])[1]
+set_name = 'C9_'+os.path.split(os.path.split(uploaddir)[0])[1]
 #subject_set.display_name = 'C7_BK1152a_'+os.path.split(uploaddir)[1]
 csv_input_file=os.path.join(uploaddir,'manifest.csv')
 
@@ -122,6 +125,7 @@ except StopIteration:
     subject_set.save()
     print("Created a new subject set with id: {}.".format(subject_set.id))
 
+t1=time.clock()
 # read the manifest and create externally linked subjects
 with open(csv_input_file, 'rb') as csvfile:
     subjects_to_upload = csv.DictReader(csvfile)
@@ -160,4 +164,6 @@ if len(saved_subjects) > 0:
 with open(savedsubjs, "a+") as subject_sets_saved:
     subject_sets_saved.write(",%s" % subject_set.id)
 print("Finished uploading {} subjects".format(uploaded_subjects_count))
+print("\nProcessing time (minutes): %s\n" % int((time.clock()-t1)/60))
+
 winsound.Beep(300,2000)

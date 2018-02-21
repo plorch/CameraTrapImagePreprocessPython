@@ -84,28 +84,38 @@ if __name__ == '__main__':
     check = os.path.split(folderpath)[1]
     print "Check name: %s\n" % check
 
-# If you move up to do multiple cameras, use code from main in
-#  image_file_crunch_Parall4.py and change starting here
-    campath = folderpath
 # For now we are assuming no subfolders under camera folder, which is how Rem
-#   has been sending them.
-    camname = os.path.split(campath)[1]
-    print "Camera card name: %s\n" % camname
-    filepaths = get_image_paths(campath)
-    # filenames = basename(filepaths)
-    rows_list = []
-    for path in filepaths:
-        subj, datetimeoriginal = get_exif_xmp_data(path)
-        dict1 = {'path': path,
-                 'filename': os.path.split(path)[1],
-                 'datetimeoriginal': pd.Timestamp(datetimeoriginal),
-                 'subject': subj}
-        rows_list.append(dict1)
-    df = pd.DataFrame(rows_list)
-    df['diff_sec'] = df['datetimeoriginal'].diff().astype('timedelta64[s]')
-    df['subject2'] = np.where(df['subject'] != 'untagged',
-                              df['subject'],
-                              np.where(df['diff_sec'] > 180, 'empty', ''))
+#   has been sending them. If this becomes untrue, look at how its done in
+#  image_file_crunch_Parall4.py
+
+
+# This version should go through this loop once for each camera so dirpath will
+#   end with camera card name.
+    cams = os.listdir(folderpath)
+    # This avoids walking check directories, looking for images
+    for cam in cams:
+        campath = os.path.join(folderpath, cam)
+        camname = cam
+        print "Camera card name: %s\n" % camname
+# Remove hidden files starting with ._ created by viewing cards on iPads
+        purge(campath, "\._")
+# Get filepaths for files in dir that end in .jpg or .png
+        filepaths = get_image_paths(campath)
+        rows_list = []
+        for path in filepaths:
+            subj, datetimeoriginal = get_exif_xmp_data(path)
+            dict1 = {'path': path,
+                     'filename': os.path.split(path)[1],
+                     'datetimeoriginal': pd.Timestamp(datetimeoriginal),
+                     'subject': subj}
+            rows_list.append(dict1)
+# For now we are exporting manifest for each dir
+        df = pd.DataFrame(rows_list)
+        df['diff_sec'] = df['datetimeoriginal'].diff().astype('timedelta64[s]')
+        df['subject2'] = np.where(df['subject'] != 'untagged',
+                                  df['subject'],
+                                  np.where(df['diff_sec'] > 180, 'empty', ''))
 # Export to .csv
-    df.to_csv('testMS1126A.csv', index=False)
-    print('Done exporting')
+        df_filename = os.path.join(campath, 'manifest_w_empty.csv')
+        df.to_csv(df_filename, mode='a', index=False)
+        print "Done exporting manifest for %s" % campath

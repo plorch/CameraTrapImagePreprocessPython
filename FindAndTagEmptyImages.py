@@ -1,3 +1,4 @@
+import re
 import sys
 import os
 import datetime
@@ -73,6 +74,13 @@ def get_exif_xmp_data(filename):
     return subject, DateTimeOriginal
 
 
+def purge(dir, pattern):
+    """ Remove extraneous files created by mac OS."""
+    for f in os.listdir(dir):
+        if re.match(pattern, f):
+            os.remove(os.path.join(dir, f))
+
+
 if __name__ == '__main__':
     folderpath = sys.argv[-1]
     print "\nChecking if folder path exists...\n"
@@ -112,8 +120,7 @@ if __name__ == '__main__':
 # For now we are exporting manifest for each dir
         df = pd.DataFrame(rows_list)
         df['diff_sec'] = df['datetimeoriginal'].diff().astype('timedelta64[s]')
-        df['subject2'] = np.where(df['subject'] != 'untagged',
-                                  df['subject'],
+        df['subject2'] = np.where(df['subject'] != 'untagged', df['subject'],
                                   np.where(df['diff_sec'] > 180, 'empty', ''))
 # Export to .csv
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')

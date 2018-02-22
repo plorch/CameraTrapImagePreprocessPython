@@ -75,7 +75,8 @@ def get_exif_xmp_data(filename):
 
 
 def purge(dir, pattern):
-    """ Remove extraneous files created by mac OS."""
+""" Remove extraneous files created by mac OS."""
+
     for f in os.listdir(dir):
         if re.match(pattern, f):
             os.remove(os.path.join(dir, f))

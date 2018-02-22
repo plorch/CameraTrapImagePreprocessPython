@@ -39,7 +39,7 @@ def get_exif_xmp_data(filename):
 # reversed() below allows gets to APP1 and http://... first, avoiding assigning
 #   subject twice. Will work if order of 2 APP1 segments are reversed.
             for segment, content in reversed(img.applist):
-                marker, body = content.split('\x00', 1)
+                marker, body = content.split(b'\x00', 1)
                 # print("File: %s, Segment: %s, marker: %s " % (os.path.basename(filename), segment, marker))
                 if segment == 'APP1':
                     if marker == 'http://ns.adobe.com/xap/1.0/':

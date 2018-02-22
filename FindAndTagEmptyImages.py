@@ -40,7 +40,7 @@ def get_exif_xmp_data(filename):
 #   subject twice. Will work if order of 2 APP1 segments are reversed.
             for segment, content in reversed(img.applist):
                 marker, body = content.split('\x00', 1)
-                # print "File: %s, Segment: %s, marker: %s " % (os.path.basename(filename), segment, marker)
+                # print("File: %s, Segment: %s, marker: %s " % (os.path.basename(filename), segment, marker))
                 if segment == 'APP1':
                     if marker == 'http://ns.adobe.com/xap/1.0/':
                         bd = body[body.find('<dc:subject>'):body.find('</dc:subject>')]
@@ -69,7 +69,7 @@ def get_exif_xmp_data(filename):
                         # break
 
     except IOError:
-        print 'IOERROR ' + filename
+        print('IOERROR ' + filename)
 #    img.close()
     return subject, DateTimeOriginal
 
@@ -83,14 +83,14 @@ def purge(dir, pattern):
 
 if __name__ == '__main__':
     folderpath = sys.argv[-1]
-    print "\nChecking if folder path exists...\n"
+    print("\nChecking if folder path exists...\n")
     if os.path.exists(folderpath):
-        print "Ok!\n"
+        print("Ok!\n")
     else:
-        print "%s does not exist.\n" % folderpath
+        print("%s does not exist.\n" % folderpath)
         sys.exit("Bad path!")
     check = os.path.split(folderpath)[1]
-    print "Check name: %s\n" % check
+    print("Check name: %s\n" % check)
 
 # For now we are assuming no subfolders under camera folder, which is how Rem
 #   has been sending them. If this becomes untrue, look at how its done in
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     for cam in cams:
         campath = os.path.join(folderpath, cam)
         camname = cam
-        print "Camera card name: %s\n" % camname
+        print("Camera card name: %s\n" % camname)
 # Remove hidden files starting with ._ created by viewing cards on iPads
         purge(campath, "\._")
 # Get filepaths for files in dir that end in .jpg or .png
@@ -125,4 +125,4 @@ if __name__ == '__main__':
 # Export to .csv
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
         df.to_csv(df_filename, mode='a', index=False)
-        print "Done exporting manifest for %s" % campath
+        print("Done exporting manifest for %s" % campath)

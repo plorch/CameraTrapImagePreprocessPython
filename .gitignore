@@ -141,3 +141,4 @@ $RECYCLE.BIN/
 # My extras
 BU/
 imagemaniptest_py/
+*.csv

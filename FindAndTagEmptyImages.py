@@ -1,4 +1,6 @@
 #!C:/Python27/python.exe
+# Needs to be run in Python 2.X and this shebang does not seem to works
+# So use py -2 path
 import re
 import sys
 import os
@@ -125,6 +127,7 @@ if __name__ == '__main__':
     cams = os.listdir(folderpath)
     # This avoids walking check directories, looking for images
     t = time.clock()
+    i = 0
     for cam in cams:
         campath = os.path.join(folderpath, cam)
         camname = cam
@@ -146,8 +149,19 @@ if __name__ == '__main__':
         df['diff_sec'] = df['datetimeoriginal'].diff().astype('timedelta64[s]')
         df['subject2'] = np.where(df['subject'] != 'untagged', df['subject'],
                                   np.where(df['diff_sec'] > 180, 'empty', ''))
-# Export to .csv
+# Export to .csv for each camera for debugging
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
-        df.to_csv(df_filename, mode='a', index=False)
-        tt = time.clock()
-        print("Done exporting manifest for %s in %s min" % (camname, ((tt-t)/60)))
+# To make one manifest for whole check, toggle the comments on the lines below
+        df.to_csv(df_filename, mode='w', index=False)
+        # df.to_csv(df_filename, mode='a', index=False)
+        t2 = time.clock()
+        print("Done exporting manifest for %s in %s min" % (camname, ((t2-t)/60)))
+# To make one manifest for whole check, toggle the comments on the lines below
+#   Not sure the if will work.
+        df_filename = os.path.join(campath, 'manifest_w_empty.csv')
+        df.to_csv(df_filename, mode='w', index=False)
+        # df_checkname = os.path.join(folderpath, 'manifest_w_empty.csv')
+        # df.to_csv(df_checkname, mode='a', index=False,
+        #   header=(if i == 0: True else: False))
+    tt = time.clock()
+    print("Done exporting manifest for %s in %s min" % (check, ((tt-t)/60)))

@@ -2,6 +2,7 @@ import re
 import sys
 import os
 import datetime
+import time
 from PIL import Image
 from PIL.ExifTags import TAGS
 import numpy as np
@@ -11,9 +12,11 @@ import pandas as pd
 
 # x 1. get info from args
 # x 2. get file list
-#   a. starting with just one camera directory with no subdirs
+# x  a. starting with just one camera directory with no subdirs
 # x 3. get datetime and TAGS
-# 4. figure out empties and tag files
+# x 4. figure out empties
+# x5. add time tracking
+# 6. tag files?
 
 
 def get_image_paths(folderpath):
@@ -101,6 +104,7 @@ if __name__ == '__main__':
 #   end with camera card name.
     cams = os.listdir(folderpath)
     # This avoids walking check directories, looking for images
+    t = time.clock()
     for cam in cams:
         campath = os.path.join(folderpath, cam)
         camname = cam
@@ -125,4 +129,5 @@ if __name__ == '__main__':
 # Export to .csv
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
         df.to_csv(df_filename, mode='a', index=False)
-        print("Done exporting manifest for %s" % campath)
+        tt = time.clock()
+        print("Done exporting manifest for %s in %s min" % (camname, ((tt-t)/60))

@@ -130,4 +130,4 @@ if __name__ == '__main__':
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
         df.to_csv(df_filename, mode='a', index=False)
         tt = time.clock()
-        print("Done exporting manifest for %s in %s min" % (camname, ((tt-t)/60))
+        print("Done exporting manifest for %s in %s min" % (camname, ((tt-t)/60)))

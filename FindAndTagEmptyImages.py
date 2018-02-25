@@ -21,6 +21,9 @@ import pandas as pd
 # x5. add time tracking
 # 6. tag files?
 
+# Number of seconds to use when identifying empty images from unmarked
+SKIP = 180
+
 
 def get_image_paths(folderpath):
     """Get image paths."""
@@ -148,7 +151,7 @@ if __name__ == '__main__':
         df = pd.DataFrame(rows_list)
         df['diff_sec'] = df['datetimeoriginal'].diff().astype('timedelta64[s]')
         df['subject2'] = np.where(df['subject'] != 'untagged', df['subject'],
-                                  np.where(df['diff_sec'] > 180, 'empty', ''))
+                                  np.where(df['diff_sec'] > SKIP, 'empty', ''))
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
 # To not make one manifest for each camera, toggle comment on the line below
         # df.to_csv(df_filename, mode='w', index=False)

@@ -100,7 +100,7 @@ def get_exif_xmp_data(filename):
 
 
 def purge(dir, pattern):
-    """ Remove extraneous files created by mac OS."""
+    """ Remove extraneous files created by windows, mac OS, or iOS."""
     for f in os.listdir(dir):
         if re.match(pattern, f):
             os.remove(os.path.join(dir, f))
@@ -129,10 +129,11 @@ if __name__ == '__main__':
     t = time.clock()
     i = 0
     for cam in cams:
+        t1 = time.clock()
         campath = os.path.join(folderpath, cam)
         camname = cam
         print("Camera card name: %s\n" % camname)
-# Remove hidden files starting with ._ created by viewing cards on iPads
+# Remove hidden files starting with ._ created by viewing cards on iPads or mac
         purge(campath, "\._")
 # Get filepaths for files in dir that end in .jpg or .png
         filepaths = get_image_paths(campath)
@@ -144,24 +145,20 @@ if __name__ == '__main__':
                      'datetimeoriginal': pd.Timestamp(datetimeoriginal),
                      'subject': subj}
             rows_list.append(dict1)
-# For now we are exporting manifest for each dir
         df = pd.DataFrame(rows_list)
         df['diff_sec'] = df['datetimeoriginal'].diff().astype('timedelta64[s]')
         df['subject2'] = np.where(df['subject'] != 'untagged', df['subject'],
                                   np.where(df['diff_sec'] > 180, 'empty', ''))
-# Export to .csv for each camera for debugging
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
-# To make one manifest for whole check, toggle the comments on the lines below
-        df.to_csv(df_filename, mode='w', index=False)
-        # df.to_csv(df_filename, mode='a', index=False)
+# To not make one manifest for each camera, toggle comment on the line below
+        # df.to_csv(df_filename, mode='w', index=False)
+# Debug code, can be commented out
         t2 = time.clock()
-        print("Done exporting manifest for %s in %s min" % (camname, ((t2-t)/60)))
-# To make one manifest for whole check, toggle the comments on the lines below
-#   Not sure the if will work.
-        df_filename = os.path.join(campath, 'manifest_w_empty.csv')
-        df.to_csv(df_filename, mode='w', index=False)
-        # df_checkname = os.path.join(folderpath, 'manifest_w_empty.csv')
-        # df.to_csv(df_checkname, mode='a', index=False,
-        #   header=(if i == 0: True else: False))
+        print("Exported manifest for %s in %s min\n" % (camname, ((t2-t1)/60)))
+# To make one manifest for whole check, toggle the comments on 2 lines below
+        df_checkname = os.path.join(folderpath, 'manifest_w_empty.csv')
+        df.to_csv(df_checkname, mode='a', index=False,
+                  header=(True if i == 0 else False))
+        i += 1
     tt = time.clock()
-    print("Done exporting manifest for %s in %s min" % (check, ((tt-t)/60)))
+    print("Exported manifest for %s in %s min" % (check, ((tt-t)/60)))

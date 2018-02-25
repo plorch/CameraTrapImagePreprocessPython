@@ -150,7 +150,7 @@ if __name__ == '__main__':
             rows_list.append(dict1)
         df = pd.DataFrame(rows_list)
 # May want to comment this line out when printing manifests for each camera
-        df['camrea'] = camname
+        df['camera'] = camname
         df['diff_sec'] = df['datetimeoriginal'].diff().astype('timedelta64[s]')
         df['subject2'] = np.where(df['subject'] != 'untagged', df['subject'],
                                   np.where(df['diff_sec'] > SKIP, 'empty', ''))

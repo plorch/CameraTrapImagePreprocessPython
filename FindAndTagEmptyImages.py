@@ -149,9 +149,14 @@ if __name__ == '__main__':
                      'subject': subj}
             rows_list.append(dict1)
         df = pd.DataFrame(rows_list)
+# May want to comment this line out when printing manifests for each camera
+        df['camrea'] = camname
         df['diff_sec'] = df['datetimeoriginal'].diff().astype('timedelta64[s]')
         df['subject2'] = np.where(df['subject'] != 'untagged', df['subject'],
                                   np.where(df['diff_sec'] > SKIP, 'empty', ''))
+# Comment out if you don't need to eliminate head and tail images with
+#   images with camera case
+        # df['cum_secs'] = df.diff_sec.cumsum()
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
 # To not make one manifest for each camera, toggle comment on the line below
         # df.to_csv(df_filename, mode='w', index=False)

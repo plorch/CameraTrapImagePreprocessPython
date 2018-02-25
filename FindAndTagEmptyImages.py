@@ -1,6 +1,6 @@
 #!C:/Python27/python.exe
 # Needs to be run in Python 2.X and this shebang does not seem to works
-# So use py -2 path
+# So use `py -2 path`
 import re
 import sys
 import os
@@ -13,13 +13,6 @@ import pandas as pd
 
 """ Construct a panda with current filenames and paths, create datetime, and tags."""
 
-# x 1. get info from args
-# x 2. get file list
-# x  a. starting with just one camera directory with no subdirs
-# x 3. get datetime and TAGS
-# x 4. figure out empties
-# x5. add time tracking
-# 6. tag files?
 
 # Number of seconds to use when identifying empty images from unmarked
 SKIP = 180
@@ -162,7 +155,7 @@ if __name__ == '__main__':
         # df.to_csv(df_filename, mode='w', index=False)
 # Debug code, can be commented out
         t2 = time.clock()
-        print("Exported manifest for %s in %s min\n" % (camname, ((t2-t1)/60)))
+        print("Processed manifest for %s in %s min\n" % (camname, ((t2-t1)/60)))
 # To make one manifest for whole check, toggle the comments on 2 lines below
         df_checkname = os.path.join(folderpath, 'manifest_w_empty.csv')
         df.to_csv(df_checkname, mode='a', index=False,

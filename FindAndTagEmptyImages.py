@@ -52,7 +52,7 @@ def get_exif_data_img(filename,img):
 
 def get_exif_xmp_data(filename):
     """Get embedded EXIF data from image file XMP."""
-# Source: <a href="http://www.endlesslycurious.com/2011/05/11/extracting-image-exif-data-with-python/">http://www.endlesslycurious.com/2011/05/11/extract...</a>
+# Source: http://www.endlesslycurious.com/2011/05/11/extracting-image-exif-data-with-python/
 #   and https://stackoverflow.com/questions/6822693/read-image-xmp-data-in-python?noredirect=1&lq=1
 
 # This turns out to be easy for the DateTimeOriginal, since it is stored in

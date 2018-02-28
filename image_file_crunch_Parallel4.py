@@ -9,12 +9,15 @@ from PIL import Image, ImageDraw  # ImageChops,
 from PIL.ExifTags import TAGS
 from multiprocessing import Pool
 
-""" Rename files based on current folder name, Date and Time from exif data."""
-#   Files are resized to below Zooniverse's threshold of 600Kb, the camera name is
-#     obscured, and we write out a manifest for Zooniverse upload.
-# This version uses filepath rather than name for the multiprocessed part. It works
-# with camera directory as input.  This must be pasted into a global variable below
-# becuase you cannot pass things that come from STDIN to another process.
+""" Rename files, files are resized, camera name is obscured, and write out
+a manifest."""
+#   Rename files based on current folder name, Date, and Time from exif data
+#   Files are resized to below Zooniverse's threshold of 600Kb, the camera name
+#     is obscured, and we write out a manifest for Zooniverse upload.
+# This version uses filepath rather than name for the multiprocessed part. It
+# works with camera directory as input.  This must be pasted into a global
+# variable below becuase you cannot pass things that come from STDIN to another
+# process.
 # This one also does all cameras in a camera check.
 #
 # Creates a manifest and toupload folder for each camera subdirectory.

@@ -28,7 +28,7 @@ def fileNewname(out_path, ck, camname, datetime, num):
     """Replace old filename with one based on check, camera name and date/time."""
     # Key, value pairs of what to replace.
     dictobj = {
-        '<num>': num,
+        '<num>': str(num),
         '<datetaken>': datetime,
         '<cname>': camname,
         '<ck>': check

@@ -65,7 +65,7 @@ if __name__ == '__main__':
             raise
     checkname = sys.argv[1]
 # Read data into a panda
-    df = pd.read_csv(manifest)
+    df = pd.read_csv(manifest,parse_dates=['datetimeoriginal'])
 # Remove rows with no tag
     df = df[df.subject2.notna()]
 

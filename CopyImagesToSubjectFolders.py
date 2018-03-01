@@ -44,17 +44,17 @@ if __name__ == '__main__':
 # Check for bad paths
     print("\nChecking if file path exists...\n")
     if os.path.exists(manifest):
-        print("Ok!\n")
+        print("Input path Ok!\n")
     else:
         print("%s does not exist.\n" % manifest)
         sys.exit("Bad input path!")
     if os.path.exists(out_path):
-        print("Ok!\n")
+        print("Output path Ok!\n")
     else:
         print("%s does not exist.\n" % out_path)
         sys.exit("Bad output path!")
 
-    check = os.basename(os.path.split(manifest)[0])
+    check = os.path.basename(os.path.split(manifest)[0])
     print("Check name: %s\n" % check)
 
     out_dir = os.path.join(out_path, train_folder)
@@ -78,6 +78,7 @@ if __name__ == '__main__':
             if not os.path.isdir(subj_dir):
                 raise
 
+# Do the copying using threading
     i = 1
     for index, row in df.iterrows():
         subj2 = row['subject2']
@@ -88,3 +89,5 @@ if __name__ == '__main__':
                           '%Y%m%d__%H_%M_%S'), i)
         Thread(target=shutil.copy, args=[src, dst]).start()
         i += 1
+        if i == 10:
+            exit()

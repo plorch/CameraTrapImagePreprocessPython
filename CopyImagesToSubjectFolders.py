@@ -70,7 +70,7 @@ if __name__ == '__main__':
             raise
     checkname = sys.argv[1]
 # Read data into a panda
-    df = pd.read_csv(manifest,parse_dates=['datetimeoriginal'])
+    df = pd.read_csv(manifest, parse_dates=['datetimeoriginal'])
 # Remove rows with no tag
     df = df[df.subject2.notna()]
 # Add place to track new names
@@ -101,10 +101,10 @@ if __name__ == '__main__':
         shutil.copy(src, dst)
         i += 1
 # Uncomment for testing on smaller number of files
-        if i == 10:
-            exit()
+        # if i == 10:
+        #     break
     tt = time.clock()
-    print("Finished copying %s files in %s min." % [i, ((tt-t)/60)])
+    print("Finished copying %s files in %s min." % (i, ((tt-t)/60)))
 # Save newfilename back out to a manifest for later use
-    df.to_csv(os.path.join(out_dir, 'manifest_w_newfnames.csv'),
-                  index=False)
+    df.to_csv(os.path.join(out_dir, checkname+'manifest_w_newfnames.csv'),
+              index=False)

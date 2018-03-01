@@ -42,7 +42,7 @@ def fileNewname(out_path, ck, camname, datetime, num):
 if __name__ == '__main__':
     manifest = sys.argv[-1]
 # Check for bad paths
-    print("\nChecking if file path exists...\n")
+    print("\nChecking if file paths exists...\n")
     if os.path.exists(manifest):
         print("Input path Ok!\n")
     else:
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     df = df[df.subject2.notna()]
 
 # Create directories for image copies, if they don't exist
-    for subj in df.subject2.unique:
+    for subj in df.subject2.unique():
         subj_dir = os.path.join(out_dir, subj)
         try:
             os.makedirs(subj_dir)

@@ -92,6 +92,7 @@ if __name__ == '__main__':
         newfilename = fileNewname(checkname, row['camera'],
                                   date_to_string(row['datetimeoriginal'],
                                   '%Y%m%d__%H_%M_%S'), i)
+        df.newfilename[index] = newfilename
         dst = os.path.join(out_dir, subj2, newfilename)
 # This chokes because too many open files
         # Thread(target=shutil.copy, args=[src, dst]).start()
@@ -99,4 +100,9 @@ if __name__ == '__main__':
         i += 1
 # Uncomment for testing on smaller number of files
         if i == 10:
+            df.to_csv(os.path.join(out_dir, 'manifest_w_newfnames.csv'),
+                      index=False)
             exit()
+# Save newfilename back out to a manifest for later use
+        df.to_csv(os.path.join(out_dir, 'manifest_w_newfnames.csv'),
+                  index=False)

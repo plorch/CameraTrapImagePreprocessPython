@@ -29,7 +29,7 @@ def multi_replace(text, dictobj):
     return text
 
 
-def fileNewname(out_path, ck, camname, datetime, num):
+def fileNewname(ck, camname, datetime, num):
     """Replace old filename with one based on check, camera name and date/time."""
     # Key, value pairs of what to replace.
     dictobj = {
@@ -39,8 +39,7 @@ def fileNewname(out_path, ck, camname, datetime, num):
         '<ck>': ck
     }
     # Rename
-    new_filename = os.path.join(out_path,
-                                multi_replace(filename_pattern, dictobj))
+    new_filename = multi_replace(filename_pattern, dictobj)
     return(new_filename)
 
 
@@ -73,6 +72,8 @@ if __name__ == '__main__':
     df = pd.read_csv(manifest,parse_dates=['datetimeoriginal'])
 # Remove rows with no tag
     df = df[df.subject2.notna()]
+# Add place to track new names
+    df['newfilename'] = ""
 
 # Create directories for image copies, if they don't exist
     for subj in df.subject2.unique():
@@ -88,12 +89,14 @@ if __name__ == '__main__':
     for index, row in df.iterrows():
         subj2 = row['subject2']
         src = row['path']
-        dst = fileNewname(os.path.join(out_dir, subj2),
-                          checkname, row['camera'],
-                          date_to_string(row['datetimeoriginal'],
-                          '%Y%m%d__%H_%M_%S'), i)
-        Thread(target=shutil.copy, args=[src, dst]).start()
+        newfilename = fileNewname(checkname, row['camera'],
+                                  date_to_string(row['datetimeoriginal'],
+                                  '%Y%m%d__%H_%M_%S'), i)
+        dst = os.path.join(out_dir, subj2, newfilename)
+# This chokes because too many open files
+        # Thread(target=shutil.copy, args=[src, dst]).start()
+        shutil.copy(src, dst)
         i += 1
 # Uncomment for testing on smaller number of files
-        # if i == 10:
-        #     exit()
+        if i == 10:
+            exit()

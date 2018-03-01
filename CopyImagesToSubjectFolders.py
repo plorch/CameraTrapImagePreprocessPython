@@ -11,7 +11,7 @@ from threading import Thread
 # py -2 .\CopyImagesToSubjectFolders.py 'C1' 'E:\UNPROCESSED\
 # First_three_checks_tagged_and_nothing\A_check_Tagged_and_nothings\
 # manifest_w_empty.csv'
-# 
+
 filename_pattern = '<ck>_<cname>_<datetaken>_<num>.jpg'
 out_path = r'E:\UNPROCESSED'
 train_folder = 'train1'
@@ -36,7 +36,7 @@ def fileNewname(out_path, ck, camname, datetime, num):
         '<num>': str(num),
         '<datetaken>': datetime,
         '<cname>': camname,
-        '<ck>': check
+        '<ck>': ck
     }
     # Rename
     new_filename = os.path.join(out_path,

@@ -9,12 +9,15 @@ from PIL import Image, ImageDraw  # ImageChops,
 from PIL.ExifTags import TAGS
 from multiprocessing import Pool
 
-""" Rename files based on current folder name, Date and Time from exif data."""
-#   Files are resized to below Zooniverse's threshold of 600Kb, the camera name is
-#     obscured, and we write out a manifest for Zooniverse upload.
-# This version uses filepath rather than name for the multiprocessed part. It works
-# with camera directory as input.  This must be pasted into a global variable below
-# becuase you cannot pass things that come from STDIN to another process.
+""" Rename files, files are resized, camera name is obscured, and write out
+a manifest."""
+#   Rename files based on current folder name, Date, and Time from exif data
+#   Files are resized to below Zooniverse's threshold of 600Kb, the camera name
+#     is obscured, and we write out a manifest for Zooniverse upload.
+# This version uses filepath rather than name for the multiprocessed part. It
+# works with camera directory as input.  This must be pasted into a global
+# variable below becuase you cannot pass things that come from STDIN to another
+# process.
 # This one also does all cameras in a camera check.
 #
 # Creates a manifest and toupload folder for each camera subdirectory.
@@ -40,7 +43,6 @@ folderpath = r"E:\UNPROCESSED\9th Check September\9thCheckSeptember2016_1"
 
 def get_exif_data(filename):
     """Get embedded EXIF data from image file."""
-
     # Source: <a href="http://www.endlesslycurious.com/2011/05/11/extracting-image-exif-data-with-python/">http://www.endlesslycurious.com/2011/05/11/extract...</a>
 
     ret = {}
@@ -94,7 +96,7 @@ def get_numbering_format(digits, num):
 
 
 def date_to_string(dateobj, format):
-    """ Convert to string from datetime."""
+    """Convert to string from datetime."""
     return datetime.datetime.strftime(dateobj, format)
 
 
@@ -106,7 +108,7 @@ def multi_replace(text, dictobj):
 
 
 def image_reduce(img, redfac=2):
-    """ Reduce image size by redfac to meet Zooniverse 60kb upload limit."""
+    """Reduce image size by redfac to meet Zooniverse 60kb upload limit."""
     w, h = img.size
     size = (int(round(w/redfac)), int(round(h/redfac)))
 #   redfac=2 or 50% reduction should give (960,720) which is still big enough to view
@@ -154,7 +156,7 @@ def fileResizeObscure(new_filename):
 
 
 def purge(dir, pattern):
-    """ Remove extraneous files created by mac OS."""
+    """Remove extraneous files created by mac OS."""
     for f in os.listdir(dir):
         if re.match(pattern, f):
             os.remove(os.path.join(dir, f))

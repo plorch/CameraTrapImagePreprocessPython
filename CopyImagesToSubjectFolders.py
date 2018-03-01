@@ -3,7 +3,8 @@ import sys
 import os
 import shutil
 import datetime
-from threading import Thread
+import time
+# from threading import Thread
 
 """ Take manifest showing tagged files and copy them into folders by subject."""
 
@@ -84,6 +85,7 @@ if __name__ == '__main__':
             if not os.path.isdir(subj_dir):
                 raise
 
+    t = time.clock()
 # Do the copying using threading
     i = 1
     for index, row in df.iterrows():
@@ -100,9 +102,9 @@ if __name__ == '__main__':
         i += 1
 # Uncomment for testing on smaller number of files
         if i == 10:
-            df.to_csv(os.path.join(out_dir, 'manifest_w_newfnames.csv'),
-                      index=False)
             exit()
+    tt = time.clock()
+    print("Finished copying %s files in %s min." % [i, ((tt-t)/60)])
 # Save newfilename back out to a manifest for later use
-        df.to_csv(os.path.join(out_dir, 'manifest_w_newfnames.csv'),
+    df.to_csv(os.path.join(out_dir, 'manifest_w_newfnames.csv'),
                   index=False)

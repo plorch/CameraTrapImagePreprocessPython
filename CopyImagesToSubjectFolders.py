@@ -7,6 +7,11 @@ from threading import Thread
 
 """ Take manifest showing tagged files and copy them into folders by subject."""
 
+# Calling this program will look like this:
+# py -2 .\CopyImagesToSubjectFolders.py 'C1' 'E:\UNPROCESSED\
+# First_three_checks_tagged_and_nothing\A_check_Tagged_and_nothings\
+# manifest_w_empty.csv'
+# 
 filename_pattern = '<ck>_<cname>_<datetaken>_<num>.jpg'
 out_path = r'E:\UNPROCESSED'
 train_folder = 'train1'

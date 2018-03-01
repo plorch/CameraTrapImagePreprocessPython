@@ -94,5 +94,6 @@ if __name__ == '__main__':
                           '%Y%m%d__%H_%M_%S'), i)
         Thread(target=shutil.copy, args=[src, dst]).start()
         i += 1
-        if i == 10:
-            exit()
+# Uncomment for testing on smaller number of files
+        # if i == 10:
+        #     exit()

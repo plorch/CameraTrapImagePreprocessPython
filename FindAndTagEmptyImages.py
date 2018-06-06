@@ -138,7 +138,7 @@ if __name__ == '__main__':
         rows_list = []
         for path in filepaths:
             filename, file_extension = os.path.splitext(path)
-            if file_extension.lower == '.png'
+            if file_extension.lower == '.png':
                 print("Encountered a .png, skipping")
                 continue
             subj, datetimeoriginal = get_exif_xmp_data(path)

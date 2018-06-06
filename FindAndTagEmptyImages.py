@@ -24,7 +24,9 @@ def get_image_paths(folderpath):
     """Get image paths."""
     return (os.path.join(folderpath, f)
       for f in os.listdir(folderpath)
-      if os.path.splitext(f)[1].lower() in {'.jpg', '.png'})
+#      if os.path.splitext(f)[1].lower() in {'.jpg', '.png'})
+      if os.path.splitext(f)[1].lower() == '.jpg')
+
 
 
 def get_exif_data_img(filename,img):

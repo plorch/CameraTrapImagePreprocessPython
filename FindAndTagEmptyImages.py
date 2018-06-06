@@ -137,7 +137,8 @@ if __name__ == '__main__':
         filepaths = get_image_paths(campath)
         rows_list = []
         for path in filepaths:
-            filename, file_extension = os.path.splitext(path)
+            file_basename = os.path.basename(path)
+            filename, file_extension = os.path.splitext(file_basename)
             if file_extension.lower == '.png':
                 print("Encountered a .png, skipping")
                 continue

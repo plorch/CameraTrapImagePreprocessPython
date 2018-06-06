@@ -1,6 +1,8 @@
 #!C:/Python27/python.exe
-# Needs to be run in Python 2.X and this shebang does not seem to works
+# Needs to be run in Python 2.X and this shebang does not seem to work
 # So use `py -2 path`
+# py -2 .\FindAndTagEmptyImages.py 'E:\UNPROCESSED\6th_checkJune2016_tagged_good'
+
 import re
 import sys
 import os
@@ -90,7 +92,7 @@ def get_exif_xmp_data(filename):
                         DateTimeOriginal = get_exif_data_img(filename, img)
 
     except IOError:
-        print('IOERROR ' + filename)
+        print('IOERROR ' + filename + ' is bad')
 #    img.close()
     return subject, DateTimeOriginal
 
@@ -135,6 +137,10 @@ if __name__ == '__main__':
         filepaths = get_image_paths(campath)
         rows_list = []
         for path in filepaths:
+            filename, file_extension = os.path.splitext(path)
+            if file_extension.lower == '.png'
+                print("Encountered a .png, skipping")
+                continue
             subj, datetimeoriginal = get_exif_xmp_data(path)
             dict1 = {'path': path,
                      'filename': os.path.split(path)[1],
@@ -148,7 +154,7 @@ if __name__ == '__main__':
         df['subject2'] = np.where(df['subject'] != 'untagged', df['subject'],
                                   np.where(df['diff_sec'] > SKIP, 'empty', ''))
 # Comment out if you don't need to eliminate head and tail images with
-#   images with camera case
+#   camera case
         # df['cum_secs'] = df.diff_sec.cumsum()
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
 # To not make one manifest for each camera, toggle comment on the line below

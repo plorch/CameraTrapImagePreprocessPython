@@ -12,6 +12,9 @@ import time
 # py -2 .\CopyImagesToSubjectFolders.py 'C2' 'E:\UNPROCESSED\
 # First_three_checks_tagged_and_nothing\B_check_Tagged_and_nothings\
 # manifest_w_empty.csv'
+# or
+# py -2 .\CopyImagesToSubjectFolders.py 'C7' 'E:\UNPROCESSED\CMP 7th check
+#  July 2016 tagged and nothings\manifest_w_empty.csv'
 
 filename_pattern = '<ck>_<cname>_<datetaken>_<num>.jpg'
 out_path = r'E:\UNPROCESSED'

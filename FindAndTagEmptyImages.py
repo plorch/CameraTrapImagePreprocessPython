@@ -2,6 +2,7 @@
 # Needs to be run in Python 2.X and this shebang does not seem to work
 # So use `py -2 path`
 # py -2 .\FindAndTagEmptyImages.py 'E:\UNPROCESSED\6th_checkJune2016_tagged_good'
+# py -2 .\FindAndTagEmptyImages.py 'E:\UNPROCESSED\CMP 7th check July 2016 tagged and nothings'
 
 import re
 import sys

@@ -38,7 +38,7 @@ a manifest."""
 filename_pattern = '<ck>_<cname>_<dname>__<datetaken>__<num>.jpg'
 SAVE_DIRECTORY = 'toupload'
 # The r below turns the string into a raw string, preventing the \ from causing escapes
-folderpath = r"E:\UNPROCESSED\9th Check September\9thCheckSeptember2016_1"
+folderpath = r"E:\UNPROCESSED\9th Check September\9thCheckSeptember2016_2"
 
 
 def get_exif_data(filename):

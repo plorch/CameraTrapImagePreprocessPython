@@ -38,7 +38,7 @@ project_slug = 'pat-lorch/focus-on-wildlife-cleveland-metroparks'
 Panoptes.connect(username='Pat_Lorch', password=os.environ['ZOONPASS'])
 
 ## *** Change these every time you run it. ***
-uploaddir=r'E:\UNPROCESSED\9th Check September\9thCheckSeptember2016_1\WC1072a\toupload'
+uploaddir=r'E:\UNPROCESSED\9th Check September\9thCheckSeptember2016_2\WC1376a\toupload'
 print uploaddir
 savedsubjs=os.path.join(os.path.split(os.path.split(uploaddir)[0])[0],'subject_sets_saved.txt')
 print savedsubjs

@@ -1,6 +1,9 @@
 #!C:/Python27/python.exe
-# Needs to be run in Python 2.X and this shebang does not seem to works
+# Needs to be run in Python 2.X and this shebang does not seem to work
 # So use `py -2 path`
+# py -2 .\FindAndTagEmptyImages.py 'E:\UNPROCESSED\6th_checkJune2016_tagged_good'
+# py -2 .\FindAndTagEmptyImages.py 'E:\UNPROCESSED\CMP 7th check July 2016 tagged and nothings'
+
 import re
 import sys
 import os
@@ -22,7 +25,9 @@ def get_image_paths(folderpath):
     """Get image paths."""
     return (os.path.join(folderpath, f)
       for f in os.listdir(folderpath)
-      if os.path.splitext(f)[1].lower() in {'.jpg', '.png'})
+#      if os.path.splitext(f)[1].lower() in {'.jpg', '.png'})
+      if os.path.splitext(f)[1].lower() == '.jpg')
+
 
 
 def get_exif_data_img(filename,img):
@@ -90,7 +95,7 @@ def get_exif_xmp_data(filename):
                         DateTimeOriginal = get_exif_data_img(filename, img)
 
     except IOError:
-        print('IOERROR ' + filename)
+        print('IOERROR ' + filename + ' is bad')
 #    img.close()
     return subject, DateTimeOriginal
 
@@ -135,6 +140,11 @@ if __name__ == '__main__':
         filepaths = get_image_paths(campath)
         rows_list = []
         for path in filepaths:
+            file_basename = os.path.basename(path)
+            filename, file_extension = os.path.splitext(file_basename)
+            if file_extension.lower == '.png':
+                print("Encountered a .png, skipping")
+                continue
             subj, datetimeoriginal = get_exif_xmp_data(path)
             dict1 = {'path': path,
                      'filename': os.path.split(path)[1],
@@ -148,7 +158,7 @@ if __name__ == '__main__':
         df['subject2'] = np.where(df['subject'] != 'untagged', df['subject'],
                                   np.where(df['diff_sec'] > SKIP, 'empty', ''))
 # Comment out if you don't need to eliminate head and tail images with
-#   images with camera case
+#   camera case
         # df['cum_secs'] = df.diff_sec.cumsum()
         df_filename = os.path.join(campath, 'manifest_w_empty.csv')
 # To not make one manifest for each camera, toggle comment on the line below

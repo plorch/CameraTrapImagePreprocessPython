@@ -29,5 +29,6 @@ for folder in os.listdir(root_dir):
 			if len(files) == 0:
 				break
 			else:
+				random.seed() # to get same results, enter an integer here
 				file = random.choice(files)
 				shutil.copyfile(os.path.join(src, file), os.path.join(dst,file))

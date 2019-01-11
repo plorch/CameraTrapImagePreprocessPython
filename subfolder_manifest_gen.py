@@ -1,5 +1,5 @@
 import os
-import shutil
+# import shutil
 import pandas as pd
 
 """ Get filenames and dirs from folder used to train transfer model and create a manifest. """

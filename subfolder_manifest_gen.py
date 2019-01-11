@@ -4,7 +4,10 @@ import pandas as pd
 
 """ Get filenames and dirs from folder used to train transfer model and create a manifest. """
 
-# This can be used to move files out to another location to make separate training and test sets.
+# This should not be as useful now that SubsampleFolders.py generates a
+#   manifestself.
+# Output from this can be used to move files out to another location to make
+#   separate training and test sets.
 
 low_number = 1000
 random_amount = 1000

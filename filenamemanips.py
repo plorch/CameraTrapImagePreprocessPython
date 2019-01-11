@@ -1,5 +1,5 @@
 import os
-
+# the if in the for below may be a python 3 thing
 files = [ f for f in os.listdir('.') if f[-4:].lower in ('.jpg','.png') ]
 
 DRYRUN=True

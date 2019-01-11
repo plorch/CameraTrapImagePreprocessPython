@@ -2,12 +2,15 @@ import os
 import shutil
 import random
 
+""" Create training data set by subsampling folders. """
+
 low_number = 1000
 random_amount = 1000
-
+# Need to add ability to output a manifest of paths of chosen images so that they can be 
+#  removed to make training and testing subsets.
 
 root_dir = r'E:\UNPROCESSED\train1'
-output_dir = r'E:\UNPROCESSED\train1_1000'
+output_dir = r'E:\UNPROCESSED\train1_1000_test'
 
 for folder in os.listdir(root_dir):
 

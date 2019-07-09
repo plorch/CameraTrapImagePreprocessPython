@@ -70,14 +70,15 @@ def get_filenames(folderpath):  #
     """Get folderpath, make that working directory, and return the list of files.
     """
     os.chdir(folderpath)
-    files=os.listdir('.')
+    files = os.listdir('.')
     return [i for i in files if os.path.splitext(i)[1].lower() in {'.jpg', '.png'}]
+
 
 def get_image_paths(folderpath):
     """Get image paths."""
     return (os.path.join(folderpath, f)
-      for f in os.listdir(folderpath)
-      if os.path.splitext(f)[1].lower() in {'.jpg', '.png'})
+            for f in os.listdir(folderpath)
+            if os.path.splitext(f)[1].lower() in {'.jpg', '.png'})
 
 
 def get_numbering_format(digits, num):
@@ -206,7 +207,7 @@ if __name__ == '__main__':
                 print "Rename: %s minutes" % ((tt-t)/60)
 
                 # After renaming get filepaths again
-                newfilepaths = get_image_paths(os.path.join(dirpath,dir))
+                newfilepaths = get_image_paths(os.path.join(dirpath, dir))
                 # print "\n".join(newfilepaths)
 
     # Use of dirpath here means their is only one "toupload" folder created per camera
@@ -220,7 +221,7 @@ if __name__ == '__main__':
                 pool.join()
 
             # Make manifest
-                fpath=os.path.join(dirpath, SAVE_DIRECTORY)
+                fpath = os.path.join(dirpath, SAVE_DIRECTORY)
                 with open(os.path.join(fpath, "manifest.csv"), 'wb') as f:
                     filenames = get_filenames(fpath)
                     w = csv.writer(f)

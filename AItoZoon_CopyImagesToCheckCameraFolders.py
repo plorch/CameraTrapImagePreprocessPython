@@ -4,17 +4,25 @@ import os
 import shutil
 import datetime
 import time
+from PIL import Image, ImageDraw  # ImageChops,
+from PIL.ExifTags import TAGS
+# After running pip install progressbar2 or pip install tqdm
+# import progressbar
+import tqdm
 # from threading import Thread
 
 """ Take manifest from AI showing tagged files and copy them into folders by
 check and camera in a way that makes sense for future Zoonivers uploads panda
-allows tracking back to original."""
+allows tracking back to original. Pathnames on AWS and windows are different
+requiring some antics to remake source paths."""
 
 # Calling this program will look like this:
 # py -2 .\AItoZoon_CopyImagesToCheckCameraFolders.py 'C22' 'E:\UNPROCESSED\22ndCheckJanuary2018\train_1000_2nd_4_server_weights_predictionsC22_BC.csv'
 
+manifest = sys.argv[-1]
 filename_pattern = '<ck>_<cname>_<datetaken>_<num>.jpg'
-source_path = r'E:\UNPROCESSED\22ndCheckJanuary2018'
+source_path = os.path.dirname(manifest)
+# r'E:\UNPROCESSED\22ndCheckJanuary2018'
 zoon_folder = 'zoon_upload'
 
 def get_exif_data(filename):
@@ -84,6 +92,31 @@ def multi_replace(text, dictobj):
     return text
 
 
+def image_reduce(img, redfac=2):
+    """Reduce image size by redfac to meet Zooniverse 60kb upload limit."""
+    w, h = img.size
+    size = (int(round(w/redfac)), int(round(h/redfac)))
+#   redfac=2 or 50% reduction should give (960,720) which is still big enough to view
+    img = img.resize(size, Image.ANTIALIAS)
+    return (img)
+
+# Kept here just to help creating fileNewname below
+def fileRename(current_file, num, digits):
+    """Replace old filename with one based on camera name (dir name) and date/time."""
+    # Key, value pairs of what to replace.
+    dictobj = {
+        '<num>': get_numbering_format(digits, num),
+        '<datetaken>': date_to_string(get_date_taken(current_file), '%Y%m%d__%H_%M'),
+        '<dname>': dirname,
+        '<cname>': camname,
+        '<ck>': check
+    }
+    # Rename
+    new_filename = os.path.join(os.path.dirname(current_file),multi_replace(filename_pattern, dictobj))
+    shutil.move(current_file, new_filename)
+    return(new_filename)
+
+
 def fileNewname(ck, camname, datetime, num):
     """Replace old filename with one based on check, camera name and date/time."""
     # Key, value pairs of what to replace.
@@ -99,7 +132,7 @@ def fileNewname(ck, camname, datetime, num):
 
 
 if __name__ == '__main__':
-    manifest = sys.argv[-1]
+#    manifest = sys.argv[-1]
 # Check for bad paths
     print("\nChecking if file paths exists...\n")
     if os.path.exists(manifest):
@@ -127,12 +160,23 @@ if __name__ == '__main__':
     df = pd.read_csv(manifest)
 # Remove rows with no tag
     df = df[df.predicted.notna()]
-# Add places to track sourcefile paths
+# Add places to track sourcefile paths which are different from path on AWS
+# For testing: py -2
+# import os
+# import pandas as pd
+# source_path=r'E:\UNPROCESSED\22ndCheckJanuary2018\train_1000_2nd_4_server_weights_predictionsC22_BC.csv'
+# df= pd.read_csv(r'E:\UNPROCESSED\22ndCheckJanuary2018\train_1000_2nd_4_server_weights_predictionsC22_BC.csv')
+# zoon_folder = 'zoon_upload'
+# out_dir = os.path.join(source_path, zoon_folder)
+
+# This pulls off the end part to make a new path name
     end_part = df.file_name.str.split('/', 1, expand=True)[1]
     df['camera'] = df.file_name.str.split('/', 2, expand=True)[1]
+# makes new sourcepath from end part
     df['sourcepath'] = end_part.apply(lambda x: os.path.abspath(os.path.join(source_path, x)))
     # df['destpath'] = end_part.apply(lambda x: os.path.abspath(os.path.join(out_dir, x)))
     df['destpath'] = ""
+    df['datetimeoriginal'] = ""
 
 # Create directories for image copies, if they don't exist
     for fldr in ('birds', 'squirrels', '10focal_species'):
@@ -145,32 +189,35 @@ if __name__ == '__main__':
 
     t = time.clock()
 # Do the copying (using threading?)
+# The .loc stuff ensures that assignments are done to panda df and not view
+# tqdm is to tell progress and estimate time elapsed
     i = 1
-    for index, row in df.iterrows():
+    for index, row in tqdm.tqdm(df.iterrows(), total=df.shape[0]):
         subj2 = row['predicted']
         src = row['sourcepath']
+        date_str = df.loc[index,'datetimeoriginal'] = date_to_string(get_date_taken(src), '%Y%m%d__%H_%M_%S')
         newfilename = fileNewname(checkname, row['camera'],
-                                  date_to_string(row['datetimeoriginal'],
-                                  '%Y%m%d__%H_%M_%S'), i)
-        df.sourcepath[index] = os.path.join(source_path, end_part[index])
+                                  date_str, i)
+        df.loc[index,'sourcepath'] = os.path.join(source_path, end_part[index])
         if subj2 in ('BIRD', 'TURKEY'):
-            df.destpath[index] = os.path.join(out_dir, 'birds', newfilename)
+            df.loc[index,'destpath'] = os.path.join(out_dir, 'birds', newfilename)
         elif subj2 in ('BLWSQL', 'CHIPMK', 'FLYSQL', 'FOXSQL', 'MLGSQL',
                           'GRYSQL', 'REDSQL', 'WDCHUK'):
-            df.destpath[index] = os.path.join(out_dir, 'squirrels', newfilename)
+            df.loc[index,'destpath'] = os.path.join(out_dir, 'squirrels', newfilename)
         elif subj2 in ('CATDOM', 'COYOTE', 'DEER', 'DOGDOM', 'GRFOX',
                           'HUMAN', 'MINK', 'OPOSSM', 'RACOON', 'RDFOX'):
-            df.destpath[index] = os.path.join(out_dir, '10focal_species', newfilename)
+            df.loc[index,'destpath'] = os.path.join(out_dir, '10focal_species', newfilename)
         else:
-            df.destpath[index] = None
-        dst = os.path.join(out_dir, newfilename)
-        shutil.copy(df.sourcepath[index], df.destpath[index])
+            df.loc[index,'destpath'] = None
+#        dst = os.path.join(out_dir, newfilename)
+        if df.loc[index,'destpath'] != None:
+            shutil.copy(df.loc[index,'sourcepath'], df.loc[index,'destpath'])
         i += 1
 # Uncomment for testing on smaller number of files
 #         if i == 10:
 #             break
     tt = time.clock()
-    # print("Finished copying %s files in %s min." % (i, ((tt-t)/60)))
+    print("Finished copying %s files in %s min." % (i, ((tt-t)/60)))
 # Save newfilename back out to a manifest for later use
     df.to_csv(os.path.join(out_dir, checkname+'manifest_w_sourcedest.csv'),
               index=False)
